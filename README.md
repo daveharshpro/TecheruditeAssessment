@@ -1,73 +1,49 @@
+# TecheruditeAssessment
 
-# Jotform Signature Form Automation (Playwright)
+## Overview
 
-This project automates the testing of the **Jotform Signature Form** using [Playwright](https://playwright.dev/).  
-It covers three scenarios:
-1. Validation for empty required fields  
-2. Invalid email scenario  
-3. Valid form submission with signature  
+This project automates the testing of the Jotform Signature Form using [Playwright](https://playwright.dev). It covers the following scenarios:
 
----
+1. Validation for empty required fields
+2. Invalid email scenario
+3. Valid form submission with signature
 
-## **Project Structure** (Since this project contains only 2–3 test cases, I have kept the project and code structure simple.)
+## Project Structure
+
+Since this project contains only 2–3 test cases, the project and code structure is kept simple.
 
 ```
 tests/
 ├── config/
-│   └── env.js                # Loads environment variables from .env
-│
+│   └── env.js                         # Loads environment variables from .env
 ├── helpers/
-│   └── form-helpers.js        # Reusable Playwright helper functions
-│
-└── jotform-signature.spec.js  # Main test spec
+│   └── form-helpers.js                # Test helpers
+└── form.spec.js                       # Test cases of NEWLY given URL
 ```
----
 
-## **Setup Instructions**
+## Setup
 
-### 1. Clone the Repository
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/daveharshpro/TecheruditeAssessment.git
+   cd TecheruditeAssessment
+   ```
+
+2. Find a `.env` file in the root directory and add necessary environment variables.
+
+## Running Tests
+
+To run the tests:
+
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
+npx playwright test                     # For headless execution
+npx playwright test --headed            # For Headed execution
 ```
+## Show reports
 
-### 2. Install Dependencies
-```bash
-npm install
-```
+to see the last execution
 
-### 3. Set Environment Variables
-Create a `.env` file in the root folder:
-
-```env
-DEMO_PAGE_URL=https://www.jotform.com/widgets/signature
-DEMO_BTN_SELECTOR=text=Demo
-ERROR_BANNER_SELECTOR=div[role='alert'] span[class='error-navigation-message']
-SUCCESS_MESSAGE_SELECTOR=div[class='form-all'] div h1
-
-USER_EMAIL=test@example.com
-USER_PASSWORD=secret123
-```
-
----
-
-## **Running the Tests**
-
-Run all tests:
-```bash
-npx playwright test
-```
-
-Run tests in headed mode (visible browser):
-```bash
-npx playwright test --headed
-```
-
----
-
-## **View Test Reports**
-
-After tests complete, open the HTML report:
 ```bash
 npx playwright show-report
 ```
