@@ -1,11 +1,28 @@
 require('dotenv').config();
 
 module.exports = {
-  demoPageUrl: process.env.demo_Page_Url || 'https://www.jotform.com/widgets/signature',
-  demoBtnSelector: process.env.demo_Btn_Selector || 'text=Demo',
-  emptyErrorMessage: process.env.empty_Error_Message || "This field is required.",
-  errorLocator: process.env.error_Locator || "div[role='alert'] span[class='error-navigation-message']",
-  invalidEmailMessage: process.env.invalid_Email_Message || "Enter a valid e-mail address",
-  successMessageSelector: process.env.success_Message_Selector || "div[class='form-all'] div h1"
+  BASE_URL: process.env.base_url,
   
+  // Valid Inputs
+  VALID_NAME: process.env.valid_name,
+  VALID_EMAIL: process.env.valid_email,
+  VALID_PHONE: process.env.valid_phone,
+  VALID_DOB: process.env.valid_dob,
+  VALID_PASSWORD: process.env.valid_password,
+  VALID_GENDER: process.env.valid_gender,
+  
+  // Invalid Inputs
+  INVALID_EMAILS: process.env.invalid_emails.split(','),
+  INVALID_PHONE_SHORT: process.env.invalid_phone_short,
+  INVALID_PHONE_ALPHA: process.env.invalid_phone_alpha,
+  INVALID_PASSWORD: process.env.invalid_password,
+  
+  // Security Inputs
+  XSS_INPUT: process.env.xss_input,
+  SQL_INJECTION: process.env.sql_injection,
+  LONG_STRING: process.env.long_string,
+  UNICODE_INPUT: process.env.unicode_input,
+  
+  // Edge Cases
+  WHITESPACE_EMAIL: process.env.whitespace_email
 };

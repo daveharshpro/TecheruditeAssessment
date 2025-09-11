@@ -1,64 +1,45 @@
 const { expect } = require('@playwright/test');
-const env = require('../config/env');
+const env = require('../config/env.js');
 
-async function openDemoForm(context) {
-  const page = await context.newPage();
-  await page.goto(env.demoPageUrl);
-
-  const [newPage] = await Promise.all([
-    context.waitForEvent('page'),
-    page.click(env.demoBtnSelector),
-  ]);
-  await newPage.waitForLoadState();
-  return { page, newPage };
+export async function fillForm(page, { name, email, phone, dob, password, gender }) {
+  if (name) await page.fill('#name-input', name);
+  if (email) await page.fill('#email-input', email);
+  if (phone) await page.fill('input[name="phone"]', phone);
+  if (dob) await page.fill('input[name="dob"]', dob);
+  if (password) await page.fill('input[name="password"]', password);
+  if (gender) await page.selectOption('#gender-select', gender);
 }
 
-async function acceptTerms(newPage) {
-  const frame = await newPage.frame({ url: /termsConditions/ });
-  if (frame) {
-    await frame.click('.icheckbox_minimal .iCheck-helper', { force: true });
-  }
+export async function submitForm(page) {
+  await page.click('button[type="submit"]');
 }
 
-async function fillForm(newPage, name, email) {
-  await newPage.fill('#input_4', name);
-  await newPage.fill('#input_5', email);
-}
-
-async function drawSignature(newPage) {
-  const signature = newPage.locator('canvas');
-  const box = await signature.boundingBox();
+export async function drawSignature(page) {
+  const canvas = page.locator('#signature-canvas');
+  const box = await canvas.boundingBox();
   if (box) {
-    await newPage.mouse.move(box.x + 10, box.y + 10);
-    await newPage.mouse.down();
-    await newPage.mouse.move(box.x + 100, box.y + 50);
-    await newPage.mouse.up();
+    await page.mouse.move(box.x + 10, box.y + 10);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 50, box.y + 50);
+    await page.mouse.up();
   }
 }
 
-async function submitAndCheckEmptyError(newPage) {
-  await newPage.click('button[type="submit"]');
-  const banner = newPage.locator(env.errorLocator);
-  await expect(banner).toHaveText(env.emptyErrorMessage);
+export async function clearSignature(page) {
+  await page.click('.clear-btn');
 }
 
-async function submitAndCheckInvalidEmailError(newPage) {
-  await newPage.click('button[type="submit"]');
-  const banner = newPage.locator(env.errorLocator);
-  await expect(banner).toHaveText(env.invalidEmailMessage);
+export async function expectFieldError(page, selector, expectedText) {
+  const errorLocator = page.locator(selector).locator('..').locator('.error-text');
+  await expect(errorLocator).toHaveText(expectedText);
 }
 
-async function submitAndCheckSuccess(newPage) {
-  await newPage.click('button[type="submit"]');
-  await expect(newPage.locator(env.successMessageSelector)).toContainText("Thank You!");
+export async function expectNoErrors(page) {
+  await expect(page.locator('.error-text')).toHaveCount(0);
 }
 
-module.exports = {
-  openDemoForm,
-  acceptTerms,
-  fillForm,
-  drawSignature,
-  submitAndCheckEmptyError,
-  submitAndCheckInvalidEmailError,
-  submitAndCheckSuccess
-};
+export async function getSignatureDataLength(page) {
+  return await page.evaluate(() =>
+    document.getElementById('signature-canvas').toDataURL().length
+  );
+}
